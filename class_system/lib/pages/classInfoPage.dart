@@ -28,7 +28,7 @@ class ClassInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(className),
+        title: Text(className, style: const TextStyle(fontWeight: FontWeight.bold, ),),
       ),
       body: Container(
         margin: const EdgeInsets.all(20.0),

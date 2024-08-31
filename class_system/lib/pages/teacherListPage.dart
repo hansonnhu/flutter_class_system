@@ -26,7 +26,7 @@ class _TeacherListPageState extends State<TeacherListPage> {
             // Navigator.pop(context); // 返回
           },
         ),
-        title: const Text('講師清單'),
+        title: const Text('講師清單' ,style: TextStyle(fontWeight: FontWeight.bold, ),),
       ),
       body: ListView.builder(
         itemCount: data.length,
@@ -75,7 +75,7 @@ class _TeacherListPageState extends State<TeacherListPage> {
 
                 // Divider
                 Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: const Divider(color: Colors.black45),
                 ),
 
@@ -97,7 +97,7 @@ class _TeacherListPageState extends State<TeacherListPage> {
                         margin: const EdgeInsets.all(15.0),
                         child: Row(
                           children: [
-                            const Icon(Icons.calendar_today),
+                            const Icon(Icons.calendar_month_outlined, color: Colors.black54),
                             const SizedBox(width: 15.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
