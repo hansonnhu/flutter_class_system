@@ -7,8 +7,8 @@ class CourseModel {
   final String courseName;
   final String description;
   final String courseDay;
-  final DateTime startTime;
-  final DateTime endTime;
+  final String startTime;
+  final String endTime;
   final String teacherName;
 
   CourseModel({
@@ -28,8 +28,8 @@ class CourseModel {
       courseName: json['courseName'],
       description: json['description'],
       courseDay: json['courseDay'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
+      startTime: json['startTime'],
+      endTime: json['endTime'],
       teacherName: json['teacherName'],
     );
   }
@@ -79,8 +79,8 @@ class CourseRepository {
   }
 
   // 所有講師列表
-  Future<List<UserModel>> fetchInstructors() async {
-    final response = await client.get(Uri.parse('$baseUrl/instructors'));
+  Future<List<UserModel>> fetchTeachers() async {
+    final response = await client.get(Uri.parse('$baseUrl/teachers'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => UserModel.fromJson(json)).toList();
@@ -90,8 +90,8 @@ class CourseRepository {
   }
 
   // 以 teacherId 取得該講師所開之所有課程
-  Future<List<CourseModel>> fetchCoursesByInstructor(int teacherId) async {
-    final response = await client.get(Uri.parse('$baseUrl/instructors/$teacherId/courses'));
+  Future<List<CourseModel>> fetchCoursesByTeacher(int teacherId) async {
+    final response = await client.get(Uri.parse('$baseUrl/teachers/$teacherId/courses'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => CourseModel.fromJson(json)).toList();
@@ -101,20 +101,20 @@ class CourseRepository {
   }
 
   // 建立新講師，將 user 資訊送出，並且交給後端設定 role
-  Future<UserModel> createInstructor(UserModel instructor) async {
+  Future<UserModel> createTeacher(UserModel teacher) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/instructors'),
+      Uri.parse('$baseUrl/teachers'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(UserModel),
     );
     if (response.statusCode == 201) {
       return UserModel.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to create instructor');
+      throw Exception('Failed to create teacher');
     }
   }
 
-  // 建立新課程，CourseId 為 null，則代表是新增
+  // 建立新課程，CourseId 為 null，則代表是新增，並且回傳該課程物件
   Future<CourseModel> createCourse(CourseModel course) async {
     final response = await client.post(
       Uri.parse('$baseUrl/courses'),
@@ -128,7 +128,7 @@ class CourseRepository {
     }
   }
 
-  // 更新課程，若有 CourseId 則為更新
+  // 更新課程，有 CourseId，則為更新，並且回傳該課程物件
   Future<CourseModel> updateCourse(CourseModel course) async {
     final response = await client.post(
       Uri.parse('$baseUrl/courses'),
